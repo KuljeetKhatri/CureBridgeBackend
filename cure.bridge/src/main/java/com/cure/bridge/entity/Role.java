@@ -1,5 +1,5 @@
 package com.cure.bridge.entity;
 
-enum Role {
+public enum Role {
     ADMIN, DOCTOR, PATIENT
 }

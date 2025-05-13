@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Map;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
@@ -20,6 +23,8 @@ public class Response {
     private Object[] common_symptoms;
     private Object[] new_symptoms;
     private Object[] symptoms;
+    private Map<String, List> data;
+    private Map<String, Object>  mapData;
 
 
     public String getResponseCode() {
@@ -108,5 +113,21 @@ public class Response {
 
     public void setSymptoms(Object[] symptoms) {
         this.symptoms = symptoms;
+    }
+
+    public Map<String, List> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, List> data) {
+        this.data = data;
+    }
+
+    public Map<String, Object> getMapData() {
+        return mapData;
+    }
+
+    public void setMapData(Map<String, Object> mapData) {
+        this.mapData = mapData;
     }
 }

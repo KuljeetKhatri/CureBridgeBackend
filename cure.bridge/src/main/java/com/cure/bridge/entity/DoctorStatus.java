@@ -1,5 +1,5 @@
 package com.cure.bridge.entity;
 
-enum DoctorStatus {
+public enum DoctorStatus {
     PENDING, ACTIVE, INACTIVE
 }

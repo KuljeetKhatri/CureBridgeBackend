@@ -1,5 +1,5 @@
 package com.cure.bridge.entity;
 
-enum Gender {
+public enum Gender {
     MALE, FEMALE, OTHER
 }
