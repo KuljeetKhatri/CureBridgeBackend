@@ -4,6 +4,8 @@ import com.cure.bridge.dto.DoctorDTO;
 import com.cure.bridge.entity.Doctor;
 import com.cure.bridge.entity.User;
 import com.cure.bridge.service.DoctorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class DoctorController {
+    private final Logger logger = LoggerFactory.getLogger(DoctorController.class);
+
     @Autowired
     private DoctorService doctorService;
     @GetMapping("/getalldoctor")
@@ -94,6 +98,8 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
+
+
 
 }
 

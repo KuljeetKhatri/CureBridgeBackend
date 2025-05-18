@@ -1,32 +1,37 @@
 package com.cure.bridge.entity;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 @Entity
 @Table(name = "prescriptions")
 @Data
-public class Prescription implements Serializable {
+public class Prescription {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "appointment_id", nullable = false, unique = true)
-    private Appointment appointment;
+    @Column(name = "appointment_id", unique = true, nullable = false)
+    private Long appointmentId;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
-    private Patient patient;
+    @Column(name = "patient_id", nullable = false)
+    private Long patientId;
 
+    @Column(columnDefinition = "TEXT")
     private String diagnosis;
+
+    @Column(columnDefinition = "TEXT")
     private String medicines;
 
-    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
+
+    // Getters and Setters
 }

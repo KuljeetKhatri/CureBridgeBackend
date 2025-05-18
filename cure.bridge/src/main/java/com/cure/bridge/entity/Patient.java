@@ -24,6 +24,8 @@ public class Patient implements Serializable {
 
     private String contactNumber;
     private String medicalHistory;
+    @Enumerated(EnumType.STRING)
+    private PatientStatus status = PatientStatus.ACTIVE;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;

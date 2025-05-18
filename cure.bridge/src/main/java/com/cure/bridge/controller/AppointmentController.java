@@ -9,13 +9,13 @@ import com.cure.bridge.repo.UserRepo;
 import com.cure.bridge.response.Response;
 import com.cure.bridge.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -90,4 +90,63 @@ public class AppointmentController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @GetMapping("/doctor/{userId}/appointments")
+    public ResponseEntity<Map<String, Object>> getDoctorAppointments(@PathVariable Long userId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Doctor doctor = doctorRepository.findByUserId(userId);
+            if (doctor == null) {
+                response.put("responseCode", "01");
+                response.put("responseMessage", "Doctor not found");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            List<Appointment> appointments = appointmentRepository.findByDoctorId(doctor.getId());
+
+            List<Map<String, Object>> appointmentList = new ArrayList<>();
+            for (Appointment appointment : appointments) {
+                Map<String, Object> apptData = new HashMap<>();
+                apptData.put("id", appointment.getId());
+                apptData.put("appointmentDate", appointment.getAppointmentDate());
+                apptData.put("patientName", appointment.getPatient().getUser().getFullName());
+                apptData.put("patientId",appointment.getPatient().getId());
+                apptData.put("doctorId",appointment.getDoctor().getId());
+                apptData.put("time",appointment.getCreatedAt().toString());
+                apptData.put("message", appointment.getMessage()); // assuming Appointment has a message field
+                appointmentList.add(apptData);
+            }
+
+            response.put("responseCode", "00");
+            response.put("responseMessage", "Success");
+            response.put("data", appointmentList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("responseCode", "99");
+            response.put("responseMessage", "Server error: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    @PutMapping("/appointment/{id}/status")
+    public ResponseEntity<?> updateAppointmentStatus(@PathVariable long id, @RequestBody Map<String, String> payload) {
+        try {
+            Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
+            if (optionalAppointment.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");
+            }
+
+            Appointment appointment = optionalAppointment.get();
+            String newStatus = payload.get("status");
+            appointment.setStatus(AppointmentStatus.valueOf(newStatus));
+            appointmentRepository.save(appointment);
+
+            return ResponseEntity.ok("Appointment status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating status: " + e.getMessage());
+        }
+    }
+
+
 }

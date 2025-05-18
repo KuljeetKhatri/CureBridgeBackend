@@ -17,6 +17,7 @@ public class SymptomController {
     private final Logger logger = LoggerFactory.getLogger(SymptomController.class);
     private final RestTemplate restTemplate = new RestTemplate();
     private final String PYTHON_SERVER_BASE_URL = "http://localhost:5000";
+    private final String PYTHON_SENTIMENT_BASE_URL = "http://localhost:8000";
 
     private String sessionId = null;
 
@@ -93,4 +94,32 @@ public class SymptomController {
         logger.info("Response from {}: {}", url, response.getBody());
         return ResponseEntity.ok(response.getBody());
     }
+
+    @PostMapping("/sentiment")
+    public ResponseEntity<?> predictSentiment(@RequestBody Map<String, Object> payload) {
+        logger.info("Received /sentiment request with payload: {}", payload);
+
+        // Validate payload
+        if (!payload.containsKey("text") || payload.get("text") == null) {
+            logger.warn("Missing or null 'text' field in payload");
+            return ResponseEntity.badRequest().body("Missing 'text' field in payload");
+        }
+
+        String url = PYTHON_SENTIMENT_BASE_URL + "/predict";
+        logger.info("Calling FastAPI sentiment analysis API: POST {}", url);
+
+        // Create request entity with payload
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload);
+        try {
+            // Send POST request to FastAPI /predict endpoint
+            ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+            logger.info("Response from /predict: {}", response.getBody());
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            logger.error("Error calling sentiment analysis API: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error calling sentiment analysis service: " + e.getMessage());
+        }
+    }
+
 }

@@ -20,6 +20,8 @@ public class Appointment implements Serializable {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    @Column(name = "message", columnDefinition = "TEXT")
+    private String message;
     private Timestamp appointmentDate;
 
     @Enumerated(EnumType.STRING)
