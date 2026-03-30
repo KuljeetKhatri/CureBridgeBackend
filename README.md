@@ -114,26 +114,7 @@ CureBridgeBackend/
 8. Disease prediction is generated
 9. Consultation is stored for future reference
 
----
-
-### 2️⃣ Backend Setup (Spring Boot)
-
-```bash
-mvn clean install
-mvn spring-boot:run
-```
-
-### 3️⃣ AI Models Setup
-
-```bash
-cd models/SymptomExtraction_fyp
-pip install -r requirements.txt
-
-cd ../DiseasePrediction_fyp
-pip install -r requirements.txt
-```
-
----
+--- 
 
 ## 📊 Future Enhancements
 
