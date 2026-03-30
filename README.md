@@ -20,6 +20,11 @@ The system is built to address common healthcare issues such as:
 * Doctors missing key symptoms
 * Lack of proper documentation in consultations
 
+##  Architecture
+
+![Cure Bridge-Arhcitecture](https://github.com/user-attachments/assets/a7ec1b55-6f33-42f8-b6c1-e15a521ebf6e)
+
+
 ---
 
 ## 🧩 Key Features
@@ -133,4 +138,3 @@ CureBridge is designed to modernize healthcare communication by combining:
 * Telemedicine
 * Artificial Intelligence
 * Real-time data processing
-
